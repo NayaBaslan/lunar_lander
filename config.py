@@ -10,7 +10,7 @@ class Config:
     ## Optimzation
     lr=0.001
     batch_size = 64
-    n_minibatches = 800
+    n_minibatches = 2000
     ## testing
     n_test_episodes = 15
     rendering = True
