@@ -2,6 +2,7 @@ import tensorflow as tf
 import os
 from datetime import datetime
 
+tf.compat.v1.disable_v2_behavior()
 class Evaluation:
 
     def __init__(self, store_dir, name, stats = []):
@@ -9,18 +10,27 @@ class Evaluation:
         Creates placeholders for the statistics listed in stats to generate tensorboard summaries.
         e.g. stats = ["loss"]
         """
-        tf.reset_default_graph()
-        self.sess = tf.Session()
-        self.tf_writer = tf.summary.FileWriter(os.path.join(store_dir, "%s-%s" % (name, datetime.now().strftime("%Y%m%d-%H%M%S")) ))
+        #tf.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
 
+        #self.sess = tf.Session()
+        self.sess = tf.compat.v1.Session()
+
+        #self.tf_writer = tf.summary.FileWriter(os.path.join(store_dir, "%s-%s" % (name, datetime.now().strftime("%Y%m%d-%H%M%S")) ))
+        self.tf_writer = tf.compat.v1.summary.FileWriter(
+            os.path.join(store_dir, "%s-%s" % (name, datetime.now().strftime("%Y%m%d-%H%M%S"))))
         self.stats = stats
         self.pl_stats = {}
         
         for s in self.stats:
-            self.pl_stats[s] = tf.placeholder(tf.float32, name=s)
-            tf.summary.scalar(s, self.pl_stats[s])
-            
-        self.performance_summaries = tf.summary.merge_all()
+            #self.pl_stats[s] = tf.placeholder(tf.float32, name=s)
+            self.pl_stats[s] = tf.compat.v1.placeholder(tf.float32, name=s)
+
+            #tf.summary.scalar(s, self.pl_stats[s])
+            tf.compat.v1.summary.scalar(s, self.pl_stats[s])
+
+        #self.performance_summaries = tf.summary.merge_all()
+        self.performance_summaries = tf.compat.v1.summary.merge_all()
 
     def write_episode_data(self, episode, eval_dict):
        """

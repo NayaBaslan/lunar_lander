@@ -43,6 +43,7 @@ def run_episode(env, agent, config, rendering=True, max_timesteps=10000):
         
         with torch.no_grad():
             a = int(torch.argmax(agent.predict(torch.tensor(state_image_hist).view(-1,history_length,100,150))))
+        print(a)
         next_state, r, done, info = env.step(a)   
         next_state_img = env.render(mode="rgb_array")[::4, ::4, :]
         episode_reward += r       
@@ -74,7 +75,7 @@ if __name__ == "__main__":
 
     # TODO: load agent
     agent = BCAgent(conf.agent_type,conf.lr,conf.hidden_units,conf.history_length)
-    agent.load("models/20200229-232502_bc_agent.pt")
+    agent.load("models/20200302-151634_bc_agent.pt")
 
     env = LunarLander()
 
